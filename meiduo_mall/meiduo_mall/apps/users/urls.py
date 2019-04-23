@@ -3,5 +3,5 @@ from django.contrib import admin
 from .views import *
 
 urlpatterns = [
-    url(r'^register/', RegisteView.as_view(),name='register'),
+    url(r'^register/$', RegisteView.as_view(),name='register'),
 ]
