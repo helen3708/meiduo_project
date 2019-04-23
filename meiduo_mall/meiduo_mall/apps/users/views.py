@@ -1,12 +1,12 @@
 from django.shortcuts import render,redirect
 from django.views import View
-from django.http import HttpResponse,HttpResponseForbidden
+from django.http import HttpResponse,HttpResponseForbidden,JsonResponse
 import re
 from .models import User
 from django.contrib.auth import login
 from django.db import DatabaseError #数据库异常的基类
 import logging
-
+from meiduo_mall.utils.response_code import RETCODE
 
 # Create your views here.
 
@@ -60,3 +60,17 @@ class RegisteView(View):
         login(request,user)
         # 注册成功重定向到首页
         return redirect('/')
+
+class usernameCountView(View):
+    """判断用户名是否已注册"""
+    def get(self,request,username):
+        # 查询当前手机号的个数要么0要么1 1代表重复
+        count=User.objects.filter(username=username).count()
+        return JsonResponse({'count':count,'code':RETCODE.OK,'errmsg':'OK'})
+
+class mobileCountView(View):
+    def get(self,request,mobile):
+        count = User.objects.filter(mobile=mobile).count()
+        return JsonResponse({'count':count,'code':RETCODE.OK,'errmsg':"OK"})
+
+
